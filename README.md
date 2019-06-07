@@ -6,7 +6,7 @@ In addition, the resulting map can be exported to be used by several multi-touch
 While the framework is implemented in SuperCollider, it requires Python for several operations, and some plug-ins from the
 Fluid Decomposition toolbox (currently at beta testing stage).
 
-For general information, please see out NIME paper:
+For general information, please see our NIME paper:
 
 Gerard Roma, Owen Green, Pierre Alexandre Tremblay, "Adaptive Mapping of Sound Collections for Data-driven Musical Interfaces". Proceedings of NIME 2019.
 
