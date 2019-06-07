@@ -51,4 +51,4 @@ For example, to generate the scatterplot, a 4D space is used:
 
 - Finally, try it on a browser: http://localhost:3000/scatterplot.html
 
-The interface expects multi-touch gestures, so a first thing to try is Chrome developer tools, then a tablet computer.
+The interface expects multi-touch gestures, so a first thing to try is device emulation in Chrome developer tools, then a tablet computer.
