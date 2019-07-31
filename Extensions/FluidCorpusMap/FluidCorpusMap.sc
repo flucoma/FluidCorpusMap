@@ -172,7 +172,7 @@ FluidCorpusMap{
             // result.postln;
             if(result!=0){"Error in AE extraction".postln; ^nil};
 
-            sliceFile = indexFolder +/+ fileName.basename ++ '.ae_segs.ds';
+	        sliceFile = (indexFolder +/+ fileName.basename ++ '.ae_segs.ds').standardizePath;
             slices = Array.newFromFile(sliceFile).flatten.asFloat;
 
             if(aServer.notNil)

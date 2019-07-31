@@ -1,4 +1,4 @@
-import sys
+import sys, os
 from pathlib import Path
 import numpy as np
 from scipy import signal
@@ -47,4 +47,4 @@ print("Getting feature vectors")
 features = ae.get_learnt_features(net, X)
 print("Computing novelty")
 boundaries = novelty_seg(features,kernel_size)
-np.savetxt(outPath + '/' + Path(stft_file).name + '.ae_segs.ds', boundaries)
+np.savetxt(os.path.expanduser(outPath + '/' + Path(stft_file).name + '.ae_segs.ds'), boundaries)
