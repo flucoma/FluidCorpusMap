@@ -27,12 +27,13 @@ FluidCorpusMap{
     }
 
 	*analyzeFolder{|folderName = nil, feature = 0, doneAction = nil|
+
 		if (folderName.isNil){
 			FileDialog({ |path|
 				FluidCorpusMap.analyzeFolder(path[0], feature, doneAction);
 			}, fileMode:2);
 		}{
-			(indexFolder+/+PathName(folderName).fileName).resolveRelative.mkdir;
+			(indexFolder+/+PathName(folderName).fileName).standardizePath.mkdir;
 			if (feature == 0)
 				{FluidCorpusMap.analyzeMFCC(folderName, doneAction)}
 				{FluidCorpusMap.analyzeAE(folderName, doneAction)}
@@ -50,13 +51,11 @@ FluidCorpusMap{
         Routine{
             wavFiles.do {|f, i|
                 var feat = FloatArray();
-                var buf = Buffer.readChannel(tmpServer,f,channels:[0],action: {|b|
-                    FluidBufMFCC.process(tmpServer,b, features: tmpFeatures);
-                });
-                tmpServer.sync;
-                FluidBufStats.process(tmpServer,tmpFeatures,stats:tmpStats, numDerivs: 1);
-                tmpServer.sync;
-                tmpStats.loadToFloatArray(action: {|a|
+				var buf = Buffer.readChannel(tmpServer,f,channels:[0]);
+				tmpServer.sync;
+				FluidBufMFCC.processBlocking(tmpServer,buf, features: tmpFeatures);
+                FluidBufStats.processBlocking(tmpServer,tmpFeatures,stats:tmpStats, numDerivs: 1);
+                tmpStats.getn(0, 182, action: {|a|
                     Array2D.fromArray(13,a.size / 13,a).colsDo{|c,i|
                         //Discard skew, kurtosis and median + their derivatives (cols 2,3,5,9,10,12)
                         if([2,3,5,9,10,12].indexOf(i.asInt).isNil) { feat=feat.addAll(c);};
@@ -70,7 +69,7 @@ FluidCorpusMap{
             tmpServer.sync;
             indexPath = (indexFolder+/+PathName(folderName)
                 .fileName).standardizePath;
-            "Writing index files to %s".format(indexPath).postln;
+            "Writing index files to %".format(indexPath).postln;
             namesFile = File(indexPath +/+ namesFilename,"w");
             fileNames.do{|name| namesFile.write(name++"\n")};
             namesFile.close;
@@ -110,7 +109,7 @@ FluidCorpusMap{
 		if (fileName.isNil){
 			FileDialog{ |path|
 				FluidCorpusMap.segmentFile(
-					path[0], kernelSize, threshold, filterSize, destFolder, doneAction, aServer);
+					path[0], kernelSize, threshold, filterSize, destFolder, feature, doneAction, aServer);
 			};
 		}{
 			var tmpServer = aServer ? Server.default;
@@ -122,18 +121,17 @@ FluidCorpusMap{
 
                 Routine{
                     "Loading...".postln;
-                    audioBuffer = Buffer.read(tmpServer, fileName, action:{|b|
-                        "Analyzing...".postln;
-                        FluidBufNoveltySlice.process(
+					audioBuffer = Buffer.read(tmpServer, fileName);
+					tmpServer.sync;
+                    "Analyzing...".postln;
+                    FluidBufNoveltySlice.processBlocking(
                             tmpServer,
-                            srcBufNum: b.bufnum,
-                            transBufNum: slicesBuffer.bufnum,
+                            source: audioBuffer,
+                            indices: slicesBuffer,
                             kernelSize:kernelSize,
-                            thresh: threshold,
+                            threshold: threshold,
                             filterSize: filterSize
-                        );
-                    });
-                    tmpServer.sync;
+                    );
                     slicesBuffer.loadToFloatArray(action:{|arr|
                         "Number of slices: %".format(arr.size).postln;
                         if(destFolder.notNil){

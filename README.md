@@ -25,7 +25,7 @@ source activate fcorpus2
 pip install -r requirements.txt
 ```
 
-Also note that some new SuperCollider plug-ins are needed. These are part of the Fluid Decomposition Toolbox, which is currently beta. They are included as macOS binaries for the moment.
+Also note that some new SuperCollider plug-ins are needed. These are part of the Fluid Decomposition Toolbox, which is currently beta. Download from http://www.flucoma.org/.
 
  Finally, for the web interfaces you will need node / npm. These are based on the supercolliderjs library.
 
