@@ -14,7 +14,7 @@
     "gulp-nodemon": "^2.2.1",
     "histogramjs": "0.0.1",
     "kd-tree-javascript": "^1.0.3",
-    "lodash": "^4.16.6",
+    "lodash": "^4.17.19",
     "socket.io": "^1.5.1",
     "socket.io-client": "^1.5.1",
     "stats-lite": "^2.2.0",
