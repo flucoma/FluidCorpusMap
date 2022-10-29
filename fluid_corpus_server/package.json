@@ -15,8 +15,8 @@
     "histogramjs": "0.0.1",
     "kd-tree-javascript": "^1.0.3",
     "lodash": "^4.16.6",
-    "socket.io": "^1.5.1",
-    "socket.io-client": "^1.5.1",
+    "socket.io": "^4.5.3",
+    "socket.io-client": "^4.5.3",
     "stats-lite": "^2.2.0",
     "supercolliderjs": "^0.14.0",
     "tone": "^13.4.9"
